@@ -240,11 +240,20 @@
             }
         });
 
-        /* Block Enter key on all fields except textarea */
+        /* Block Enter key on all fields except textarea.
+           Exception: company search input — Enter saves the typed value. */
         $('#pabr-registration-form').on('keydown', function (e) {
-            if (e.key === 'Enter' && e.target.tagName.toLowerCase() !== 'textarea') {
+            if (e.key !== 'Enter') return;
+            if (e.target.tagName.toLowerCase() === 'textarea') return;
+
+            if (e.target.id === 'pabr_company_input') {
                 e.preventDefault();
+                var val = $('#pabr_company_input').val().trim();
+                if (val) selectCompany(val);
+                return;
             }
+
+            e.preventDefault();
         });
 
         /* Clear per-field errors on user interaction */
