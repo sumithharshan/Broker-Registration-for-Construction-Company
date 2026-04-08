@@ -78,7 +78,10 @@ class PABR_Ajax {
 
         $ip = self::get_ip();
 
-        $entry_key = strtoupper( wp_generate_password( 12, false, false ) );
+        // Generate a unique 8-char key (A-Z + 0-9), verified against the DB.
+        do {
+            $entry_key = self::generate_entry_key( 8 );
+        } while ( self::entry_key_exists( $entry_key ) );
 
         $id = PABR_DB::insert( array(
             'entry_key'   => $entry_key,
@@ -101,6 +104,24 @@ class PABR_Ajax {
             'message'   => __( 'Registration submitted successfully!', 'prestige-academy-reg' ),
             'entry_key' => $entry_key,
         ) );
+    }
+
+    private static function generate_entry_key( $length = 8 ) {
+        $chars  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $max    = strlen( $chars ) - 1;
+        $result = '';
+        for ( $i = 0; $i < $length; $i++ ) {
+            $result .= $chars[ random_int( 0, $max ) ];
+        }
+        return $result;
+    }
+
+    private static function entry_key_exists( $key ) {
+        global $wpdb;
+        $table = $wpdb->prefix . PABR_TABLE;
+        return (bool) $wpdb->get_var(
+            $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE entry_key = %s", $key )
+        );
     }
 
     private static function get_ip() {

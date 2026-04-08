@@ -9,7 +9,7 @@ class PABR_DB {
         $charset = $wpdb->get_charset_collate();
         $sql = "CREATE TABLE IF NOT EXISTS {$table} (
             id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-            entry_key   VARCHAR(32)  NOT NULL UNIQUE,
+            entry_key   VARCHAR(8)   NOT NULL UNIQUE,
             name        VARCHAR(255) NOT NULL,
             email       VARCHAR(255) DEFAULT '',
             phone       VARCHAR(50)  NOT NULL,
