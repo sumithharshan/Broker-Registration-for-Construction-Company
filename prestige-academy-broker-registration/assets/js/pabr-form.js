@@ -182,12 +182,10 @@
             }
         });
 
-        /* When typing manually and pressing Enter */
-        $('#pabr_company_input').on('keydown', function (e) {
-            if (e.key === 'Enter' && isManual) {
+        /* Block Enter key from submitting the form on any field except textarea */
+        $('#pabr-registration-form').on('keydown', function (e) {
+            if (e.key === 'Enter' && e.target.tagName.toLowerCase() !== 'textarea') {
                 e.preventDefault();
-                var val = $(this).val().trim();
-                if (val) selectCompany(val);
             }
         });
 
