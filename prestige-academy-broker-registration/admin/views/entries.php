@@ -6,7 +6,6 @@
     </h1>
 
     <div class="pabr-toolbar">
-        <!-- Filters -->
         <div class="pabr-filters">
             <select id="pabr-filter-option" class="pabr-select">
                 <option value=""><?php esc_html_e( 'All Options', 'prestige-academy-reg' ); ?></option>
@@ -24,7 +23,6 @@
             <button id="pabr-reset-filters" class="button"><?php esc_html_e( 'Reset', 'prestige-academy-reg' ); ?></button>
         </div>
 
-        <!-- Export -->
         <div class="pabr-export-btns">
             <button id="pabr-export-excel" class="button button-primary">
                 &#8595; <?php esc_html_e( 'Export Excel (CSV)', 'prestige-academy-reg' ); ?>
@@ -47,11 +45,12 @@
                 <th><?php esc_html_e( 'Submitted At', 'prestige-academy-reg' ); ?></th>
                 <th><?php esc_html_e( 'Message',      'prestige-academy-reg' ); ?></th>
                 <th><?php esc_html_e( 'Browser',      'prestige-academy-reg' ); ?></th>
+                <th><?php esc_html_e( 'Action',       'prestige-academy-reg' ); ?></th>
             </tr>
         </thead>
         <tbody>
         <?php foreach ( $entries as $row ) : ?>
-            <tr>
+            <tr id="pabr-row-<?php echo esc_attr( $row['id'] ); ?>">
                 <td><?php echo esc_html( $row['id'] ); ?></td>
                 <td><code><?php echo esc_html( $row['entry_key'] ); ?></code></td>
                 <td><?php echo esc_html( $row['name'] ); ?></td>
@@ -71,6 +70,13 @@
                 </td>
                 <td class="pabr-browser-cell" title="<?php echo esc_attr( $row['browser'] ); ?>">
                     <?php echo esc_html( PABR_Admin::parse_browser( $row['browser'] ) ); ?>
+                </td>
+                <td class="pabr-center">
+                    <button class="pabr-delete-btn button button-small"
+                            data-id="<?php echo esc_attr( $row['id'] ); ?>"
+                            title="<?php esc_attr_e( 'Delete this entry', 'prestige-academy-reg' ); ?>">
+                        &#128465; <?php esc_html_e( 'Delete', 'prestige-academy-reg' ); ?>
+                    </button>
                 </td>
             </tr>
         <?php endforeach; ?>

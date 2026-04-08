@@ -104,6 +104,21 @@
     background: #f6f7f7;
 }
 
+.pabr-delete-btn {
+    background: #fff0f0 !important;
+    border-color: #e74c3c !important;
+    color: #c0392b !important;
+    white-space: nowrap;
+}
+.pabr-delete-btn:hover {
+    background: #e74c3c !important;
+    color: #fff !important;
+}
+.pabr-delete-btn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
 .pabr-dt-btn,
 .buttons-csv {
     background: #2271b1 !important;

@@ -26,7 +26,7 @@
         { code: 'ke', name: 'Kenya',                 dial: '+254' },
     ];
 
-    var selectedDial = '+971';
+    var selectedDial        = '+971';
     var selectedCountryCode = 'ae';
 
     function buildCountryList(filter) {
@@ -80,6 +80,7 @@
         $('#pabr-company-text').text(val);
         $('#pabr-clear-company').show();
         $('#pabr-dropdown-panel').hide();
+        clearFieldError('company');
         isManual = false;
     }
 
@@ -93,10 +94,79 @@
         isManual = false;
     }
 
+    /* ── Field error helpers ─────────────────────────────────────────── */
+    function showFieldError(field, message) {
+        clearFieldError(field);
+        var $wrap;
+        if (field === 'name')    $wrap = $('#pabr_name').closest('.pabr-field');
+        if (field === 'phone')   $wrap = $('#pabr_phone').closest('.pabr-field');
+        if (field === 'option')  $wrap = $('input[name="pabr_option"]').closest('.pabr-field');
+        if (field === 'company') $wrap = $('#pabr-company-wrap').closest('.pabr-field');
+        if (field === 'guests')  $wrap = $('#pabr_guests').closest('.pabr-field');
+        if ($wrap && $wrap.length) {
+            $wrap.addClass('pabr-field-error');
+            $wrap.append('<span class="pabr-field-msg">' + $('<div>').text(message).html() + '</span>');
+        } else {
+            $('#pabr-error').text(message).show();
+        }
+    }
+
+    function clearFieldError(field) {
+        var $wrap;
+        if (field === 'name')    $wrap = $('#pabr_name').closest('.pabr-field');
+        if (field === 'phone')   $wrap = $('#pabr_phone').closest('.pabr-field');
+        if (field === 'option')  $wrap = $('input[name="pabr_option"]').closest('.pabr-field');
+        if (field === 'company') $wrap = $('#pabr-company-wrap').closest('.pabr-field');
+        if (field === 'guests')  $wrap = $('#pabr_guests').closest('.pabr-field');
+        if ($wrap && $wrap.length) {
+            $wrap.removeClass('pabr-field-error');
+            $wrap.find('.pabr-field-msg').remove();
+        }
+    }
+
+    function clearAllErrors() {
+        $('.pabr-field').removeClass('pabr-field-error');
+        $('.pabr-field-msg').remove();
+        $('#pabr-success,#pabr-error').hide();
+    }
+
+    /* ── Client-side validation ──────────────────────────────────────── */
+    function validateForm() {
+        clearAllErrors();
+        var valid = true;
+
+        var name    = $('#pabr_name').val().trim();
+        var phone   = $('#pabr_phone').val().trim();
+        var company = $('#pabr_company').val().trim();
+        var guests  = parseInt($('#pabr_guests').val(), 10);
+
+        if (!name) {
+            showFieldError('name', 'Name is required.');
+            valid = false;
+        }
+        if (!phone) {
+            showFieldError('phone', 'Phone number is required.');
+            valid = false;
+        }
+        if (!company) {
+            showFieldError('company', 'Please select or enter a company name.');
+            valid = false;
+        }
+        if (isNaN(guests) || guests < 1) {
+            showFieldError('guests', 'Guest count must be at least 1.');
+            valid = false;
+        }
+        if (guests > 99) {
+            showFieldError('guests', 'Guest count cannot exceed 99.');
+            valid = false;
+        }
+
+        return valid;
+    }
+
     /* ── DOM ready ───────────────────────────────────────────────────── */
     $(function () {
 
-        /* Country selector */
         buildCountryList('');
 
         $('#pabr-selected-flag').on('click', function (e) {
@@ -116,7 +186,6 @@
             $('#pabr-dial-code').text(selectedDial);
             $('#pabr-selected-flag img').attr('src', pabrData.pluginUrl + 'assets/flags/' + selectedCountryCode + '.png');
             $('#pabr-flag-dropdown').hide();
-            updateFullPhone();
         });
 
         $(document).on('click', function (e) {
@@ -127,13 +196,6 @@
                 $('#pabr-dropdown-panel').hide();
             }
         });
-
-        function updateFullPhone() {
-            var raw   = $('#pabr_phone').val().replace(/^0+/, '');
-            $('#pabr_phone_full').val(selectedDial + raw);
-        }
-
-        $('#pabr_phone').on('input', updateFullPhone);
 
         /* Company dropdown toggle */
         $('#pabr-company-display').on('click', function () {
@@ -146,13 +208,11 @@
             }
         });
 
-        /* Clear company */
         $('#pabr-clear-company').on('click', function (e) {
             e.stopPropagation();
             clearCompany();
         });
 
-        /* Company search input */
         $('#pabr_company_input').on('input', function () {
             var term = $(this).val().trim();
             clearTimeout(searchTimer);
@@ -165,12 +225,10 @@
             searchTimer = setTimeout(function () { doSearch(term); }, 250);
         });
 
-        /* Select result */
         $(document).on('click', '.pabr-result-item', function () {
             selectCompany($(this).data('value'));
         });
 
-        /* Manual entry toggle */
         $('#pabr-other-toggle').on('click', function () {
             var typed = $('#pabr_company_input').val().trim();
             if (typed) {
@@ -182,46 +240,46 @@
             }
         });
 
-        /* Block Enter key from submitting the form on any field except textarea */
+        /* Block Enter key on all fields except textarea */
         $('#pabr-registration-form').on('keydown', function (e) {
             if (e.key === 'Enter' && e.target.tagName.toLowerCase() !== 'textarea') {
                 e.preventDefault();
             }
         });
 
+        /* Clear per-field errors on user interaction */
+        $('#pabr_name').on('input', function () { clearFieldError('name'); });
+        $('#pabr_phone').on('input', function () { clearFieldError('phone'); });
+        $('input[name="pabr_option"]').on('change', function () { clearFieldError('option'); });
+        $('#pabr_guests').on('input', function () { clearFieldError('guests'); });
+
         /* Guest count stepper */
         $('#pabr-dec-btn').on('click', function () {
             var $i = $('#pabr_guests');
             var v  = parseInt($i.val(), 10) || 1;
-            if (v > 1) $i.val(v - 1);
+            if (v > 1) { $i.val(v - 1); clearFieldError('guests'); }
         });
         $('#pabr-inc-btn').on('click', function () {
             var $i = $('#pabr_guests');
-            var v  = parseInt($i.val(), 10) || 1;
-            if (v < 99) $i.val(v + 1);
+            var v  = parseInt($i.val(), 10) || 0;
+            if (v < 99) { $i.val(v + 1); clearFieldError('guests'); }
         });
 
         /* Form submit */
         $('#pabr-registration-form').on('submit', function (e) {
             e.preventDefault();
 
-            $('#pabr-success,#pabr-error').hide();
+            if (!validateForm()) return;
 
             var name        = $('#pabr_name').val().trim();
             var phone       = $('#pabr_phone').val().trim();
             var option_type = $('input[name="pabr_option"]:checked').val();
             var company     = $('#pabr_company').val().trim();
             var guests      = parseInt($('#pabr_guests').val(), 10);
-
-            if (!name || !phone || !option_type || !company || guests < 1) {
-                $('#pabr-error').text(pabrData.i18n.required).show();
-                return;
-            }
-
-            var fullPhone = selectedDial + phone.replace(/^0+/, '');
+            var fullPhone   = selectedDial + phone.replace(/^0+/, '');
 
             var $btn = $('#pabr-submit-btn');
-            $btn.prop('disabled', true).text(pabrData.i18n.submitting);
+            $btn.prop('disabled', true).text('Submitting…');
 
             $.ajax({
                 url: pabrData.ajaxUrl,
@@ -245,13 +303,19 @@
                             res.data.message + '<br><small>Entry Key: <strong>' + res.data.entry_key + '</strong></small>'
                         ).show();
                     } else {
-                        $('#pabr-error').text(res.data.message).show();
-                        $btn.prop('disabled', false).text(pabrData.i18n.submit);
+                        var field = res.data && res.data.field ? res.data.field : '';
+                        var msg   = res.data && res.data.message ? res.data.message : 'An error occurred. Please try again.';
+                        if (field) {
+                            showFieldError(field, msg);
+                        } else {
+                            $('#pabr-error').text(msg).show();
+                        }
+                        $btn.prop('disabled', false).text('Submit Registration');
                     }
                 },
                 error: function () {
                     $('#pabr-error').text('A server error occurred. Please try again.').show();
-                    $btn.prop('disabled', false).text(pabrData.i18n.submit);
+                    $btn.prop('disabled', false).text('Submit Registration');
                 }
             });
         });

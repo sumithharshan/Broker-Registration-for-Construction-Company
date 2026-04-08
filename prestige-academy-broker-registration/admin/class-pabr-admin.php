@@ -7,6 +7,7 @@ class PABR_Admin {
         add_action( 'admin_menu',            array( __CLASS__, 'add_menu' ) );
         add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue' ) );
         add_action( 'wp_ajax_pabr_export_excel', array( __CLASS__, 'export_excel' ) );
+        add_action( 'wp_ajax_pabr_delete_entry', array( __CLASS__, 'delete_entry' ) );
     }
 
     public static function add_menu() {
@@ -28,7 +29,6 @@ class PABR_Admin {
             PABR_PLUGIN_URL . 'assets/css/pabr-admin.css',
             array(), PABR_VERSION );
 
-        /* DataTables */
         wp_enqueue_style( 'datatables-css',
             'https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css',
             array(), '1.13.6' );
@@ -36,7 +36,6 @@ class PABR_Admin {
             'https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js',
             array( 'jquery' ), '1.13.6', true );
 
-        /* DataTables Buttons + Excel (SheetJS) */
         wp_enqueue_script( 'datatables-buttons',
             'https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js',
             array( 'datatables-js' ), '2.4.2', true );
@@ -55,8 +54,9 @@ class PABR_Admin {
             array( 'datatables-html5' ), PABR_VERSION, true );
 
         wp_localize_script( 'pabr-admin-js', 'pabrAdminData', array(
-            'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-            'nonce'   => wp_create_nonce( 'pabr_nonce' ),
+            'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
+            'nonce'          => wp_create_nonce( 'pabr_nonce' ),
+            'confirmDelete'  => __( 'Are you sure you want to delete this entry? This cannot be undone.', 'prestige-academy-reg' ),
         ) );
     }
 
@@ -66,24 +66,36 @@ class PABR_Admin {
         include PABR_PLUGIN_DIR . 'admin/views/entries.php';
     }
 
-    /**
-     * Export all entries as Excel (CSV with BOM for Excel compatibility).
-     * Pure PHP – no external library needed for basic XLSX-compatible CSV.
-     */
+    public static function delete_entry() {
+        if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden' );
+        check_ajax_referer( 'pabr_nonce', 'nonce' );
+
+        $id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
+        if ( ! $id ) {
+            wp_send_json_error( array( 'message' => 'Invalid ID.' ) );
+        }
+
+        $result = PABR_DB::delete( $id );
+        if ( false === $result ) {
+            wp_send_json_error( array( 'message' => 'Could not delete entry.' ) );
+        }
+
+        wp_send_json_success( array( 'message' => 'Entry deleted.' ) );
+    }
+
     public static function export_excel() {
         if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden' );
         check_ajax_referer( 'pabr_nonce', 'nonce' );
 
-        $entries = PABR_DB::get_all();
-
+        $entries  = PABR_DB::get_all();
         $filename = 'pabr-registrations-' . date( 'Y-m-d' ) . '.csv';
+
         header( 'Content-Type: text/csv; charset=utf-8' );
         header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
         header( 'Pragma: no-cache' );
         header( 'Expires: 0' );
 
         $out = fopen( 'php://output', 'w' );
-        /* UTF-8 BOM so Excel opens it correctly */
         fputs( $out, "\xEF\xBB\xBF" );
 
         fputcsv( $out, array(

@@ -30,6 +30,20 @@
 
 .pabr-req { color: #e74c3c; }
 
+/* ── Per-field error state ──────────────────────────────────────── */
+.pabr-field-error input,
+.pabr-field-error textarea,
+.pabr-field-error .pabr-company-display,
+.pabr-field-error .pabr-number-wrap {
+    border-color: #e74c3c !important;
+}
+.pabr-field-msg {
+    display: block;
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
 .pabr-field input[type="text"],
 .pabr-field input[type="email"],
 .pabr-field input[type="tel"],

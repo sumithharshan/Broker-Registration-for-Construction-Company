@@ -15,7 +15,6 @@ class PABR_Ajax {
      * Only triggered after 3+ chars to keep response fast.
      */
     public static function search_company() {
-        // Accept nonce from GET for autocomplete requests
         $nonce = isset( $_GET['nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['nonce'] ) ) : '';
         if ( ! wp_verify_nonce( $nonce, 'pabr_nonce' ) ) {
             wp_send_json_error( array( 'message' => 'Invalid request.' ) );
@@ -58,27 +57,41 @@ class PABR_Ajax {
     public static function submit() {
         check_ajax_referer( 'pabr_nonce', 'nonce' );
 
-        $name        = isset( $_POST['pabr_name'] )    ? sanitize_text_field( wp_unslash( $_POST['pabr_name'] ) )    : '';
-        $email       = isset( $_POST['pabr_email'] )   ? sanitize_email( wp_unslash( $_POST['pabr_email'] ) )        : '';
-        $phone       = isset( $_POST['pabr_phone'] )   ? sanitize_text_field( wp_unslash( $_POST['pabr_phone'] ) )   : '';
-        $option_type = isset( $_POST['pabr_option'] )  ? sanitize_text_field( wp_unslash( $_POST['pabr_option'] ) )  : '';
-        $company     = isset( $_POST['pabr_company'] ) ? sanitize_text_field( wp_unslash( $_POST['pabr_company'] ) ) : '';
-        $guest_count = isset( $_POST['pabr_guests'] )  ? absint( $_POST['pabr_guests'] )                            : 1;
-        $message     = isset( $_POST['pabr_message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['pabr_message'] ) ) : '';
-        $browser     = isset( $_POST['pabr_browser'] ) ? sanitize_text_field( wp_unslash( $_POST['pabr_browser'] ) ) : '';
+        $name        = isset( $_POST['pabr_name'] )    ? sanitize_text_field( wp_unslash( $_POST['pabr_name'] ) )         : '';
+        $email       = isset( $_POST['pabr_email'] )   ? sanitize_text_field( wp_unslash( $_POST['pabr_email'] ) )        : '';
+        $phone       = isset( $_POST['pabr_phone'] )   ? sanitize_text_field( wp_unslash( $_POST['pabr_phone'] ) )        : '';
+        $option_type = isset( $_POST['pabr_option'] )  ? sanitize_text_field( wp_unslash( $_POST['pabr_option'] ) )       : '';
+        $company     = isset( $_POST['pabr_company'] ) ? sanitize_text_field( wp_unslash( $_POST['pabr_company'] ) )      : '';
+        $guest_count = isset( $_POST['pabr_guests'] )  ? intval( $_POST['pabr_guests'] )                                  : 0;
+        $message     = isset( $_POST['pabr_message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['pabr_message'] ) )  : '';
+        $browser     = isset( $_POST['pabr_browser'] ) ? sanitize_text_field( wp_unslash( $_POST['pabr_browser'] ) )      : '';
 
-        if ( empty( $name ) || empty( $phone ) || empty( $option_type ) || empty( $company ) || $guest_count < 1 ) {
-            wp_send_json_error( array( 'message' => __( 'Please fill in all required fields.', 'prestige-academy-reg' ) ) );
+        /* Field-level validation with specific messages */
+        if ( empty( $name ) ) {
+            wp_send_json_error( array( 'field' => 'name', 'message' => 'Name is required.' ) );
         }
-
+        if ( empty( $phone ) ) {
+            wp_send_json_error( array( 'field' => 'phone', 'message' => 'Phone number is required.' ) );
+        }
+        if ( empty( $option_type ) ) {
+            wp_send_json_error( array( 'field' => 'option', 'message' => 'Please select an option (Broker, Individual or Client).' ) );
+        }
         $allowed_options = array( 'Broker', 'Individual', 'Client' );
         if ( ! in_array( $option_type, $allowed_options, true ) ) {
-            wp_send_json_error( array( 'message' => __( 'Invalid option selected.', 'prestige-academy-reg' ) ) );
+            wp_send_json_error( array( 'field' => 'option', 'message' => 'Invalid option selected.' ) );
+        }
+        if ( empty( $company ) ) {
+            wp_send_json_error( array( 'field' => 'company', 'message' => 'Company name is required.' ) );
+        }
+        if ( $guest_count < 1 ) {
+            wp_send_json_error( array( 'field' => 'guests', 'message' => 'Guest count must be at least 1.' ) );
+        }
+        if ( $guest_count > 99 ) {
+            wp_send_json_error( array( 'field' => 'guests', 'message' => 'Guest count cannot exceed 99.' ) );
         }
 
         $ip = self::get_ip();
 
-        // Generate a unique 8-char key (A-Z + 0-9), verified against the DB.
         do {
             $entry_key = self::generate_entry_key( 8 );
         } while ( self::entry_key_exists( $entry_key ) );
@@ -97,11 +110,11 @@ class PABR_Ajax {
         ) );
 
         if ( ! $id ) {
-            wp_send_json_error( array( 'message' => __( 'Could not save registration. Please try again.', 'prestige-academy-reg' ) ) );
+            wp_send_json_error( array( 'field' => '', 'message' => 'Could not save registration. Please try again.' ) );
         }
 
         wp_send_json_success( array(
-            'message'   => __( 'Registration submitted successfully!', 'prestige-academy-reg' ),
+            'message'   => 'Registration submitted successfully!',
             'entry_key' => $entry_key,
         ) );
     }

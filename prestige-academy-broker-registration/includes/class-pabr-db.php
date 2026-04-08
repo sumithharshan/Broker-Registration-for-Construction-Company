@@ -37,7 +37,7 @@ class PABR_DB {
             array(
                 'entry_key'    => $data['entry_key'],
                 'name'         => sanitize_text_field( $data['name'] ),
-                'email'        => sanitize_email( $data['email'] ),
+                'email'        => sanitize_text_field( $data['email'] ),
                 'phone'        => sanitize_text_field( $data['phone'] ),
                 'option_type'  => sanitize_text_field( $data['option_type'] ),
                 'company'      => sanitize_text_field( $data['company'] ),
@@ -56,5 +56,11 @@ class PABR_DB {
         global $wpdb;
         $table = $wpdb->prefix . PABR_TABLE;
         return $wpdb->get_results( "SELECT * FROM {$table} ORDER BY submitted_at DESC", ARRAY_A );
+    }
+
+    public static function delete( $id ) {
+        global $wpdb;
+        $table = $wpdb->prefix . PABR_TABLE;
+        return $wpdb->delete( $table, array( 'id' => absint( $id ) ), array( '%d' ) );
     }
 }

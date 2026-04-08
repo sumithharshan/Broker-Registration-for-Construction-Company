@@ -25,7 +25,7 @@ jQuery(function ($) {
             }
         },
         columnDefs: [
-            { targets: [10, 11], orderable: false }
+            { targets: [10, 11, 12], orderable: false }
         ],
         scrollX: true,
         autoWidth: false,
@@ -33,12 +33,10 @@ jQuery(function ($) {
 
     /* ── Custom column filters ─────────────────────────────────────── */
 
-    /* Option filter */
     $('#pabr-filter-option').on('change', function () {
         table.column(5).search($(this).val()).draw();
     });
 
-    /* Company filter */
     var companyTimer;
     $('#pabr-filter-company').on('input', function () {
         var val = $(this).val();
@@ -48,7 +46,6 @@ jQuery(function ($) {
         }, 300);
     });
 
-    /* Date range filter */
     $.fn.dataTable.ext.search.push(function (settings, data) {
         var from = $('#pabr-filter-date-from').val();
         var to   = $('#pabr-filter-date-to').val();
@@ -64,7 +61,6 @@ jQuery(function ($) {
         table.draw();
     });
 
-    /* Reset filters */
     $('#pabr-reset-filters').on('click', function () {
         $('#pabr-filter-option').val('');
         $('#pabr-filter-company').val('');
@@ -80,5 +76,37 @@ jQuery(function ($) {
         var url = pabrAdminData.ajaxUrl +
             '?action=pabr_export_excel&nonce=' + pabrAdminData.nonce;
         window.location.href = url;
+    });
+
+    /* ── Delete entry ──────────────────────────────────────────────── */
+    $(document).on('click', '.pabr-delete-btn', function () {
+        if ( ! window.confirm(pabrAdminData.confirmDelete) ) return;
+
+        var $btn = $(this);
+        var id   = $btn.data('id');
+        $btn.prop('disabled', true).text('Deleting…');
+
+        $.ajax({
+            url: pabrAdminData.ajaxUrl,
+            method: 'POST',
+            data: {
+                action: 'pabr_delete_entry',
+                nonce:  pabrAdminData.nonce,
+                id:     id,
+            },
+            success: function (res) {
+                if (res.success) {
+                    var row = table.row('#pabr-row-' + id);
+                    row.remove().draw(false);
+                } else {
+                    alert(res.data.message || 'Could not delete entry.');
+                    $btn.prop('disabled', false).html('&#128465; Delete');
+                }
+            },
+            error: function () {
+                alert('Server error. Please try again.');
+                $btn.prop('disabled', false).html('&#128465; Delete');
+            }
+        });
     });
 });
