@@ -1,0 +1,325 @@
+/* Prestige Academy Broker Registration Form */
+.pabr-wrap {
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #fff;
+}
+
+.pabr-alert {
+    padding: 14px 18px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 15px;
+    line-height: 1.5;
+}
+.pabr-alert-success { background: #1a7a3c; border: 1px solid #2ea355; }
+.pabr-alert-error   { background: #7a1a1a; border: 1px solid #c0392b; }
+
+.pabr-field {
+    margin-bottom: 22px;
+}
+
+.pabr-field label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #ccc;
+    font-weight: 500;
+}
+
+.pabr-req { color: #e74c3c; }
+
+.pabr-field input[type="text"],
+.pabr-field input[type="email"],
+.pabr-field input[type="tel"],
+.pabr-field input[type="number"],
+.pabr-field textarea {
+    width: 100%;
+    background: #111;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 15px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color .2s;
+    -moz-appearance: textfield;
+}
+.pabr-field input:focus,
+.pabr-field textarea:focus {
+    border-color: #e74c3c;
+}
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* ── Phone ─────────────────────────────────────────────────────────── */
+.pabr-phone-wrap {
+    display: flex;
+    gap: 8px;
+    position: relative;
+}
+
+.pabr-country-select {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.pabr-selected-flag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 10px 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    min-width: 95px;
+    font-size: 14px;
+    color: #fff;
+    user-select: none;
+    transition: border-color .2s;
+}
+.pabr-selected-flag:hover { border-color: #666; }
+
+.pabr-flag-img { width: 22px; height: 16px; object-fit: cover; border-radius: 2px; }
+.pabr-flag-sm  { width: 20px; height: 14px; }
+.pabr-arrow    { font-size: 10px; color: #999; margin-left: 2px; }
+
+.pabr-flag-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 999;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 6px;
+    width: 260px;
+    max-height: 280px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 24px rgba(0,0,0,.6);
+}
+
+.pabr-country-search {
+    border: none !important;
+    border-bottom: 1px solid #333 !important;
+    border-radius: 0 !important;
+    background: #111 !important;
+    padding: 10px 12px !important;
+    font-size: 13px !important;
+    flex-shrink: 0;
+}
+
+#pabr-country-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    flex: 1;
+}
+#pabr-country-list li {
+    padding: 9px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #222;
+    transition: background .15s;
+}
+#pabr-country-list li:hover { background: #2a2a2a; }
+.pabr-dial-opt { margin-left: auto; color: #aaa; font-size: 12px; }
+
+.pabr-phone-input { flex: 1; }
+
+/* ── Radio ─────────────────────────────────────────────────────────── */
+.pabr-radio-group { display: flex; flex-direction: column; gap: 10px; }
+
+.pabr-radio-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #ddd;
+    user-select: none;
+}
+.pabr-radio-label input[type="radio"] { display: none; }
+
+.pabr-radio-custom {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color .2s;
+}
+.pabr-radio-label input[type="radio"]:checked + .pabr-radio-custom {
+    border-color: #e74c3c;
+    background: radial-gradient(circle, #e74c3c 40%, transparent 41%);
+}
+
+/* ── Company autocomplete ─────────────────────────────────────────── */
+.pabr-autocomplete-wrap { position: relative; }
+
+.pabr-company-display {
+    display: flex;
+    align-items: center;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: border-color .2s;
+    min-height: 46px;
+    font-size: 15px;
+    color: #aaa;
+    user-select: none;
+}
+.pabr-company-display:hover { border-color: #666; }
+#pabr-company-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.pabr-clear-btn {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0 6px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+.pabr-clear-btn:hover { color: #e74c3c; }
+
+.pabr-chevron { color: #888; font-size: 11px; margin-left: 6px; flex-shrink: 0; }
+
+.pabr-dropdown-panel {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0; right: 0;
+    z-index: 990;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.6);
+    overflow: hidden;
+}
+
+.pabr-company-search-input {
+    width: 100% !important;
+    background: #111 !important;
+    border: none !important;
+    border-bottom: 1px solid #333 !important;
+    border-radius: 0 !important;
+    padding: 11px 14px !important;
+    font-size: 14px !important;
+    color: #fff !important;
+    box-sizing: border-box !important;
+    outline: none !important;
+}
+
+.pabr-company-results {
+    max-height: 220px;
+    overflow-y: auto;
+}
+.pabr-result-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #ddd;
+    border-bottom: 1px solid #222;
+    transition: background .15s;
+}
+.pabr-result-item:hover { background: #2a2a2a; color: #fff; }
+
+.pabr-loading,
+.pabr-no-results,
+.pabr-hint {
+    padding: 12px 14px;
+    font-size: 13px;
+    color: #888;
+    text-align: center;
+}
+
+.pabr-other-option {
+    padding: 10px 14px;
+    border-top: 1px solid #333;
+    font-size: 13px;
+    color: #e74c3c;
+    cursor: pointer;
+    transition: background .15s;
+}
+.pabr-other-option:hover { background: #2a2a2a; }
+
+/* ── Guest count stepper ─────────────────────────────────────────── */
+.pabr-number-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid #333;
+    border-radius: 6px;
+    overflow: hidden;
+    width: fit-content;
+    background: #111;
+}
+
+.pabr-num-btn {
+    background: #1e1e1e;
+    border: none;
+    color: #ccc;
+    font-size: 20px;
+    width: 44px;
+    height: 46px;
+    cursor: pointer;
+    transition: background .15s;
+    line-height: 1;
+    padding: 0;
+}
+.pabr-num-btn:hover { background: #333; color: #fff; }
+
+.pabr-number-wrap input[type="number"] {
+    width: 64px;
+    text-align: center;
+    border: none !important;
+    border-left: 1px solid #333 !important;
+    border-right: 1px solid #333 !important;
+    border-radius: 0 !important;
+    background: #111 !important;
+    padding: 12px 6px !important;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* ── Submit button ───────────────────────────────────────────────── */
+.pabr-submit-btn {
+    width: 100%;
+    background: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, opacity .2s;
+    letter-spacing: .3px;
+}
+.pabr-submit-btn:hover   { background: #c0392b; }
+.pabr-submit-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+/* Scrollbar */
+.pabr-company-results::-webkit-scrollbar,
+.pabr-flag-dropdown::-webkit-scrollbar,
+#pabr-country-list::-webkit-scrollbar { width: 6px; }
+.pabr-company-results::-webkit-scrollbar-track,
+#pabr-country-list::-webkit-scrollbar-track { background: #111; }
+.pabr-company-results::-webkit-scrollbar-thumb,
+#pabr-country-list::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
