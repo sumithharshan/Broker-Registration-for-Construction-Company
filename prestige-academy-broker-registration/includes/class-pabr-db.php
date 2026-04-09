@@ -10,9 +10,9 @@ class PABR_DB {
         $sql = "CREATE TABLE IF NOT EXISTS {$table} (
             id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
             entry_key   VARCHAR(8)   NOT NULL UNIQUE,
-            name        VARCHAR(255) NOT NULL,
+            name        VARCHAR(255) DEFAULT '',
             email       VARCHAR(255) DEFAULT '',
-            phone       VARCHAR(50)  NOT NULL,
+            phone       VARCHAR(50)  DEFAULT '',
             option_type VARCHAR(20)  NOT NULL,
             company     VARCHAR(255) NOT NULL,
             guest_count TINYINT UNSIGNED NOT NULL DEFAULT 1,

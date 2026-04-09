@@ -7,8 +7,8 @@
 
         <!-- Name -->
         <div class="pabr-field">
-            <label for="pabr_name"><?php esc_html_e( 'Name', 'prestige-academy-reg' ); ?> <span class="pabr-req">*</span></label>
-            <input type="text" id="pabr_name" name="pabr_name" placeholder="" required />
+            <label for="pabr_name"><?php esc_html_e( 'Name', 'prestige-academy-reg' ); ?></label>
+            <input type="text" id="pabr_name" name="pabr_name" placeholder="" />
         </div>
 
         <!-- Email -->
@@ -19,7 +19,7 @@
 
         <!-- Phone -->
         <div class="pabr-field">
-            <label for="pabr_phone"><?php esc_html_e( 'Phone', 'prestige-academy-reg' ); ?> <span class="pabr-req">*</span></label>
+            <label for="pabr_phone"><?php esc_html_e( 'Phone', 'prestige-academy-reg' ); ?></label>
             <div class="pabr-phone-wrap">
                 <div class="pabr-country-select" id="pabr-country-select">
                     <div class="pabr-selected-flag" id="pabr-selected-flag">
@@ -32,14 +32,14 @@
                         <ul id="pabr-country-list"></ul>
                     </div>
                 </div>
-                <input type="tel" id="pabr_phone" name="pabr_phone" placeholder="" required class="pabr-phone-input" />
+                <input type="tel" id="pabr_phone" name="pabr_phone" placeholder="" class="pabr-phone-input" />
             </div>
             <input type="hidden" id="pabr_phone_full" name="pabr_phone_full" />
         </div>
 
         <!-- Options -->
         <div class="pabr-field">
-            <label><?php esc_html_e( 'Options', 'prestige-academy-reg' ); ?></label>
+            <label><?php esc_html_e( 'Options', 'prestige-academy-reg' ); ?> <span class="pabr-req">*</span></label>
             <div class="pabr-radio-group">
                 <label class="pabr-radio-label">
                     <input type="radio" name="pabr_option" value="Broker" checked />

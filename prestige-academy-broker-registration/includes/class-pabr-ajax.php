@@ -66,13 +66,7 @@ class PABR_Ajax {
         $message     = isset( $_POST['pabr_message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['pabr_message'] ) )  : '';
         $browser     = isset( $_POST['pabr_browser'] ) ? sanitize_text_field( wp_unslash( $_POST['pabr_browser'] ) )      : '';
 
-        /* Field-level validation with specific messages */
-        if ( empty( $name ) ) {
-            wp_send_json_error( array( 'field' => 'name', 'message' => 'Name is required.' ) );
-        }
-        if ( empty( $phone ) ) {
-            wp_send_json_error( array( 'field' => 'phone', 'message' => 'Phone number is required.' ) );
-        }
+        /* Field-level validation — only company, option and guest count are required */
         if ( empty( $option_type ) ) {
             wp_send_json_error( array( 'field' => 'option', 'message' => 'Please select an option (Broker, Individual or Client).' ) );
         }

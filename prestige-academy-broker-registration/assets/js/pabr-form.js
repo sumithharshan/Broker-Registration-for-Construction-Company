@@ -135,19 +135,9 @@
         clearAllErrors();
         var valid = true;
 
-        var name    = $('#pabr_name').val().trim();
-        var phone   = $('#pabr_phone').val().trim();
         var company = $('#pabr_company').val().trim();
         var guests  = parseInt($('#pabr_guests').val(), 10);
 
-        if (!name) {
-            showFieldError('name', 'Name is required.');
-            valid = false;
-        }
-        if (!phone) {
-            showFieldError('phone', 'Phone number is required.');
-            valid = false;
-        }
         if (!company) {
             showFieldError('company', 'Please select or enter a company name.');
             valid = false;
@@ -257,8 +247,6 @@
         });
 
         /* Clear per-field errors on user interaction */
-        $('#pabr_name').on('input', function () { clearFieldError('name'); });
-        $('#pabr_phone').on('input', function () { clearFieldError('phone'); });
         $('input[name="pabr_option"]').on('change', function () { clearFieldError('option'); });
         $('#pabr_guests').on('input', function () { clearFieldError('guests'); });
 
