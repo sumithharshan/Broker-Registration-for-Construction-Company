@@ -19,6 +19,7 @@ define( 'PABR_TABLE', 'pabr_registrations' );
 require_once PABR_PLUGIN_DIR . 'includes/class-pabr-db.php';
 require_once PABR_PLUGIN_DIR . 'includes/class-pabr-form.php';
 require_once PABR_PLUGIN_DIR . 'includes/class-pabr-ajax.php';
+require_once PABR_PLUGIN_DIR . 'includes/class-pabr-entries-table.php';
 
 if ( is_admin() ) {
     require_once PABR_PLUGIN_DIR . 'admin/class-pabr-admin.php';
@@ -50,8 +51,9 @@ function pabr_deactivate() {
     }
 }
 
-add_shortcode( 'prestige_registration_form', array( 'PABR_Form', 'render' ) );
-add_shortcode( 'prestige_registration_stats', 'pabr_stats_shortcode' );
+add_shortcode( 'prestige_registration_form',   array( 'PABR_Form', 'render' ) );
+add_shortcode( 'prestige_registration_stats',  'pabr_stats_shortcode' );
+add_shortcode( 'prestige_entries_table',       array( 'PABR_Entries_Table', 'render' ) );
 
 function pabr_stats_shortcode( $atts ) {
     $atts = shortcode_atts( array(
