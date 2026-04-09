@@ -14,7 +14,7 @@ class PABR_Admin {
         add_menu_page(
             __( 'Academy Registrations', 'prestige-academy-reg' ),
             __( 'Academy Reg.', 'prestige-academy-reg' ),
-            'manage_options',
+            'pabr_view_registrations',
             'pabr-registrations',
             array( __CLASS__, 'render_page' ),
             'dashicons-groups',
@@ -61,13 +61,13 @@ class PABR_Admin {
     }
 
     public static function render_page() {
-        if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden' );
+        if ( ! current_user_can( 'pabr_view_registrations' ) ) wp_die( 'Forbidden' );
         $entries = PABR_DB::get_all();
         include PABR_PLUGIN_DIR . 'admin/views/entries.php';
     }
 
     public static function delete_entry() {
-        if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden' );
+        if ( ! current_user_can( 'pabr_view_registrations' ) ) wp_die( 'Forbidden' );
         check_ajax_referer( 'pabr_nonce', 'nonce' );
 
         $id = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : 0;
@@ -84,7 +84,7 @@ class PABR_Admin {
     }
 
     public static function export_excel() {
-        if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden' );
+        if ( ! current_user_can( 'pabr_view_registrations' ) ) wp_die( 'Forbidden' );
         check_ajax_referer( 'pabr_nonce', 'nonce' );
 
         $entries  = PABR_DB::get_all();
