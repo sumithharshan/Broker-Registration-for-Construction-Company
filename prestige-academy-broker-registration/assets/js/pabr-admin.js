@@ -1,4 +1,4 @@
-/* Prestige Academy Broker Registration – Admin JS */
+/* Prestige Academy Broker Registration - Admin JS */
 jQuery(function ($) {
     'use strict';
 
@@ -21,7 +21,7 @@ jQuery(function ($) {
             lengthMenu: 'Show _MENU_ entries',
             info: 'Showing _START_ to _END_ of _TOTAL_ entries',
             paginate: {
-                first: '«', last: '»', next: '›', previous: '‹'
+                first: '<<', last: '>>', next: '>', previous: '<'
             }
         },
         columnDefs: [
@@ -31,7 +31,7 @@ jQuery(function ($) {
         autoWidth: false,
     });
 
-    /* ── Custom column filters ─────────────────────────────────────── */
+    /* -- Custom column filters --------------------------------------- */
 
     $('#pabr-filter-option').on('change', function () {
         table.column(5).search($(this).val()).draw();
@@ -71,20 +71,20 @@ jQuery(function ($) {
         table.search('').draw();
     });
 
-    /* ── Export all (server-side CSV) ─────────────────────────────── */
+    /* -- Export all (server-side CSV) ------------------------------- */
     $('#pabr-export-excel').on('click', function () {
         var url = pabrAdminData.ajaxUrl +
             '?action=pabr_export_excel&nonce=' + pabrAdminData.nonce;
         window.location.href = url;
     });
 
-    /* ── Delete entry ──────────────────────────────────────────────── */
+    /* -- Delete entry ------------------------------------------------ */
     $(document).on('click', '.pabr-delete-btn', function () {
         if ( ! window.confirm(pabrAdminData.confirmDelete) ) return;
 
         var $btn = $(this);
         var id   = $btn.data('id');
-        $btn.prop('disabled', true).text('Deleting…');
+        $btn.prop('disabled', true).text('Deleting...');
 
         $.ajax({
             url: pabrAdminData.ajaxUrl,

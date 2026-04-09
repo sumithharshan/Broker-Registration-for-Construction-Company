@@ -1,8 +1,8 @@
-/* Prestige Academy Broker Registration – Frontend JS */
+/* Prestige Academy Broker Registration - Frontend JS */
 (function ($) {
     'use strict';
 
-    /* ── Country / phone data ─────────────────────────────────────────── */
+    /* -- Country / phone data ------------------------------------------- */
     var countries = [
         { code: 'ae', name: 'United Arab Emirates', dial: '+971' },
         { code: 'sa', name: 'Saudi Arabia',          dial: '+966' },
@@ -43,7 +43,7 @@
         $ul.html(html);
     }
 
-    /* ── Company autocomplete ─────────────────────────────────────────── */
+    /* -- Company autocomplete ------------------------------------------- */
     var searchTimer = null;
     var currentXhr  = null;
     var isManual    = false;
@@ -51,7 +51,7 @@
     function doSearch(term) {
         if (currentXhr) { currentXhr.abort(); }
         var $results = $('#pabr-company-results');
-        $results.html('<div class="pabr-loading">Searching…</div>');
+        $results.html('<div class="pabr-loading">Searching...</div>');
 
         currentXhr = $.ajax({
             url: pabrData.ajaxUrl,
@@ -86,15 +86,15 @@
 
     function clearCompany() {
         $('#pabr_company').val('');
-        $('#pabr-company-text').text('Select or type company name…');
+        $('#pabr-company-text').text('Select or type company name...');
         $('#pabr-clear-company').hide();
-        $('#pabr_company_input').val('').attr('placeholder', 'Type 3+ characters to search…');
+        $('#pabr_company_input').val('').attr('placeholder', 'Type 3+ characters to search...');
         $('#pabr-company-results').html('');
         $('#pabr-other-toggle').show();
         isManual = false;
     }
 
-    /* ── Field error helpers ─────────────────────────────────────────── */
+    /* -- Field error helpers ------------------------------------------- */
     function showFieldError(field, message) {
         clearFieldError(field);
         var $wrap;
@@ -130,7 +130,7 @@
         $('#pabr-success,#pabr-error').hide();
     }
 
-    /* ── Client-side validation ──────────────────────────────────────── */
+    /* -- Client-side validation ---------------------------------------- */
     function validateForm() {
         clearAllErrors();
         var valid = true;
@@ -154,7 +154,7 @@
         return valid;
     }
 
-    /* ── DOM ready ───────────────────────────────────────────────────── */
+    /* -- DOM ready ----------------------------------------------------- */
     $(function () {
 
         buildCountryList('');
@@ -208,7 +208,7 @@
             clearTimeout(searchTimer);
             if (term.length < 3) {
                 $('#pabr-company-results').html(
-                    term.length ? '<div class="pabr-hint">Type ' + (3 - term.length) + ' more character(s)…</div>' : ''
+                    term.length ? '<div class="pabr-hint">Type ' + (3 - term.length) + ' more character(s)...</div>' : ''
                 );
                 return;
             }
@@ -224,14 +224,14 @@
             if (typed) {
                 selectCompany(typed);
             } else {
-                $('#pabr_company_input').attr('placeholder', 'Enter your company name…').focus();
+                $('#pabr_company_input').attr('placeholder', 'Enter your company name...').focus();
                 isManual = true;
                 $('#pabr-other-toggle').hide();
             }
         });
 
         /* Block Enter key on all fields except textarea.
-           Exception: company search input — Enter saves the typed value. */
+           Exception: company search input -- Enter saves the typed value. */
         $('#pabr-registration-form').on('keydown', function (e) {
             if (e.key !== 'Enter') return;
             if (e.target.tagName.toLowerCase() === 'textarea') return;
@@ -276,7 +276,7 @@
             var fullPhone   = selectedDial + phone.replace(/^0+/, '');
 
             var $btn = $('#pabr-submit-btn');
-            $btn.prop('disabled', true).text('Submitting…');
+            $btn.prop('disabled', true).text('Submitting...');
 
             $.ajax({
                 url: pabrData.ajaxUrl,

@@ -1,4 +1,4 @@
-/* Prestige Academy – Frontend Entries Table */
+/* Prestige Academy - Frontend Entries Table */
 jQuery(function ($) {
     'use strict';
 
@@ -7,7 +7,7 @@ jQuery(function ($) {
     var table = null;
     var perPage = parseInt($('#pabr-fe-table').data('per-page'), 10) || 25;
 
-    /* ── Summary bar ──────────────────────────────────────────────── */
+    /* -- Summary bar ------------------------------------------------ */
     function updateSummary() {
         if ( !table ) return;
         var info     = table.page.info();
@@ -30,7 +30,7 @@ jQuery(function ($) {
         buttons: [
             {
                 extend: 'csvHtml5',
-                text: '&#8595; Export Visible (CSV)',
+                text: 'Export Visible (CSV)',
                 title: 'registrations',
                 bom: true,
                 className: 'pabr-fe-dt-btn',
@@ -39,10 +39,10 @@ jQuery(function ($) {
         ],
         language: {
             search: '',
-            searchPlaceholder: 'Search all columns…',
+            searchPlaceholder: 'Search all columns...',
             lengthMenu: 'Show _MENU_',
-            info: 'Showing _START_–_END_ of _TOTAL_ entries',
-            paginate: { first: '«', last: '»', next: '›', previous: '‹' },
+            info: 'Showing _START_-_END_ of _TOTAL_ entries',
+            paginate: { first: '<<', last: '>>', next: '>', previous: '<' },
             emptyTable: 'No registrations found.',
             zeroRecords: 'No matching records.',
         },
@@ -55,12 +55,12 @@ jQuery(function ($) {
         initComplete: function () { updateSummary(); },
     });
 
-    /* ── Option filter ───────────────────────────────────────────── */
+    /* -- Option filter --------------------------------------------- */
     $('#pabr-fe-filter-option').on('change', function () {
         table.column(5).search($(this).val()).draw();
     });
 
-    /* ── Company filter ──────────────────────────────────────────── */
+    /* -- Company filter -------------------------------------------- */
     var companyTimer;
     $('#pabr-fe-filter-company').on('input', function () {
         var val = $(this).val();
@@ -70,7 +70,7 @@ jQuery(function ($) {
         }, 300);
     });
 
-    /* ── Date range filter ───────────────────────────────────────── */
+    /* -- Date range filter ----------------------------------------- */
     $.fn.dataTable.ext.search.push(function (settings, data) {
         if (settings.nTable.id !== 'pabr-fe-table') return true;
         var from = $('#pabr-fe-date-from').val();
@@ -87,7 +87,7 @@ jQuery(function ($) {
         table.draw();
     });
 
-    /* ── Reset ───────────────────────────────────────────────────── */
+    /* -- Reset ----------------------------------------------------- */
     $('#pabr-fe-reset').on('click', function () {
         $('#pabr-fe-filter-option').val('');
         $('#pabr-fe-filter-company').val('');
@@ -98,7 +98,7 @@ jQuery(function ($) {
         table.search('').draw();
     });
 
-    /* ── Export all (server-side CSV, all records) ───────────────── */
+    /* -- Export all (server-side CSV, all records) ----------------- */
     $('#pabr-fe-export-all').on('click', function () {
         window.location.href = pabrFeData.ajaxUrl +
             '?action=pabr_fe_export&nonce=' + pabrFeData.nonce;
