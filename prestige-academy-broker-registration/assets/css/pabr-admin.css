@@ -1,0 +1,135 @@
+/* Prestige Academy – Admin Styles */
+.pabr-admin-wrap {
+    max-width: 100%;
+    padding: 20px 24px;
+}
+
+.pabr-admin-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 22px !important;
+    margin-bottom: 18px !important;
+}
+
+.pabr-total-badge {
+    background: #2271b1;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+/* Toolbar */
+.pabr-toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+    justify-content: space-between;
+}
+
+.pabr-filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pabr-select,
+.pabr-filter-input {
+    height: 32px;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    padding: 0 10px;
+    font-size: 13px;
+    background: #fff;
+    color: #1d2327;
+    outline: none;
+}
+.pabr-select { min-width: 130px; }
+.pabr-filter-input { min-width: 160px; }
+.pabr-filter-input[type="date"] { min-width: 140px; padding: 0 6px; }
+
+.pabr-date-sep { font-size: 13px; color: #666; }
+
+.pabr-export-btns { display: flex; gap: 8px; }
+
+/* Badges */
+.pabr-badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+}
+.pabr-badge-broker     { background: #d4edda; color: #155724; }
+.pabr-badge-individual { background: #d1ecf1; color: #0c5460; }
+.pabr-badge-client     { background: #fff3cd; color: #856404; }
+
+/* Table */
+.pabr-entries-table { font-size: 13px; }
+.pabr-center { text-align: center !important; }
+
+.pabr-msg-cell,
+.pabr-browser-cell {
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: default;
+}
+
+/* DataTables overrides */
+#pabr-entries-table_wrapper .dataTables_filter input {
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+#pabr-entries-table_wrapper .dataTables_length select {
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    padding: 3px 6px;
+}
+#pabr-entries-table thead th {
+    background: #f0f0f1;
+    border-bottom: 2px solid #d0d0d0;
+    white-space: nowrap;
+}
+#pabr-entries-table tbody tr:hover td {
+    background: #f6f7f7;
+}
+
+.pabr-delete-btn {
+    background: #fff0f0 !important;
+    border-color: #e74c3c !important;
+    color: #c0392b !important;
+    white-space: nowrap;
+}
+.pabr-delete-btn:hover {
+    background: #e74c3c !important;
+    color: #fff !important;
+}
+.pabr-delete-btn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.pabr-dt-btn,
+.buttons-csv {
+    background: #2271b1 !important;
+    color: #fff !important;
+    border-color: #2271b1 !important;
+    border-radius: 4px !important;
+    padding: 5px 12px !important;
+    font-size: 13px !important;
+}
+.pabr-dt-btn:hover,
+.buttons-csv:hover {
+    background: #135e96 !important;
+    border-color: #135e96 !important;
+}
