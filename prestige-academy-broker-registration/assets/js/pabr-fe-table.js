@@ -2,9 +2,27 @@
 jQuery(function ($) {
     'use strict';
 
+    if ( !$('#pabr-fe-table').length ) return;
+
+    var table = null;
     var perPage = parseInt($('#pabr-fe-table').data('per-page'), 10) || 25;
 
-    var table = $('#pabr-fe-table').DataTable({
+    /* ── Summary bar ──────────────────────────────────────────────── */
+    function updateSummary() {
+        if ( !table ) return;
+        var info     = table.page.info();
+        var filtered = table.rows({ filter: 'applied' }).data();
+        var guests   = 0;
+        filtered.each(function (row) {
+            guests += parseInt(row[7], 10) || 0;
+        });
+        $('#pabr-fe-summary').html(
+            '<strong>' + info.recordsDisplay + '</strong> registration(s) &nbsp;|&nbsp; ' +
+            '<strong>' + guests + '</strong> total guest(s)'
+        );
+    }
+
+    table = $('#pabr-fe-table').DataTable({
         order: [[8, 'desc']],
         pageLength: perPage,
         lengthMenu: [10, 25, 50, 100],
@@ -33,23 +51,9 @@ jQuery(function ($) {
         ],
         scrollX: true,
         autoWidth: false,
-        drawCallback: updateSummary,
-        initComplete: updateSummary,
+        drawCallback: function () { updateSummary(); },
+        initComplete: function () { updateSummary(); },
     });
-
-    /* ── Summary bar ──────────────────────────────────────────────── */
-    function updateSummary() {
-        var info     = table.page.info();
-        var filtered = table.rows({ filter: 'applied' }).data();
-        var guests   = 0;
-        filtered.each(function (row) {
-            guests += parseInt(row[7], 10) || 0;
-        });
-        $('#pabr-fe-summary').html(
-            '<strong>' + info.recordsDisplay + '</strong> registration(s) &nbsp;|&nbsp; ' +
-            '<strong>' + guests + '</strong> total guest(s)'
-        );
-    }
 
     /* ── Option filter ───────────────────────────────────────────── */
     $('#pabr-fe-filter-option').on('change', function () {
