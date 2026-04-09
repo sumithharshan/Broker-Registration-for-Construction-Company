@@ -63,4 +63,13 @@ class PABR_DB {
         $table = $wpdb->prefix . PABR_TABLE;
         return $wpdb->delete( $table, array( 'id' => absint( $id ) ), array( '%d' ) );
     }
+
+    public static function get_stats() {
+        global $wpdb;
+        $table = $wpdb->prefix . PABR_TABLE;
+        return $wpdb->get_row(
+            "SELECT COUNT(*) AS total_entries, COALESCE(SUM(guest_count), 0) AS total_guests FROM {$table}",
+            ARRAY_A
+        );
+    }
 }
